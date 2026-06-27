@@ -1,0 +1,1658 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard – SocietyPro</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-deep: #040d1a;
+        --bg-dark: #071428;
+        --bg-card: #0b1f3a;
+        --border: #1a3a5c;
+        --accent: #1e90ff;
+        --accent2: #00d4ff;
+        --text: #d0e8ff;
+        --text-muted: #7a9cc0;
+        --danger: #ff4d4d;
+        --warning: #ffaa00;
+        --success: #00e676;
+        --sidebar-w: 270px;
+        --admin-gold: #ffd700;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Exo 2", sans-serif;
+        background: var(--bg-deep);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+      }
+
+      /* SIDEBAR */
+      .sidebar {
+        width: var(--sidebar-w);
+        min-height: 100vh;
+        background: linear-gradient(180deg, #060f1e 0%, #040d1a 100%);
+        border-right: 1px solid var(--border);
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 100;
+      }
+
+      .sidebar-brand {
+        padding: 20px 18px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .logo-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .logo-icon {
+        width: 42px;
+        height: 42px;
+        background: linear-gradient(135deg, #cc8800, #ffd700);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.35);
+      }
+
+      .brand-text h2 {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        background: linear-gradient(90deg, #ffd700, #ffaa00);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .brand-text p {
+        font-size: 10px;
+        color: var(--text-muted);
+        letter-spacing: 0.5px;
+      }
+
+      .admin-badge {
+        margin-top: 3px;
+        display: inline-block;
+        background: rgba(255, 215, 0, 0.12);
+        border: 1px solid rgba(255, 215, 0, 0.3);
+        color: #ffd700;
+        font-size: 9px;
+        padding: 1px 8px;
+        border-radius: 20px;
+        letter-spacing: 1.5px;
+        font-weight: 700;
+      }
+
+      .admin-info {
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .admin-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #7a5800, #cc8800);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        border: 2px solid rgba(255, 215, 0, 0.3);
+      }
+
+      .admin-meta .name {
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .admin-meta .sub {
+        font-size: 11px;
+        color: var(--text-muted);
+      }
+
+      .nav {
+        padding: 14px 10px;
+        flex: 1;
+        overflow-y: auto;
+      }
+
+      .nav-label {
+        font-size: 10px;
+        letter-spacing: 2px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        padding: 8px 8px 4px;
+        font-weight: 600;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 14px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: var(--text-muted);
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 2px;
+      }
+
+      .nav-item:hover {
+        background: rgba(255, 215, 0, 0.06);
+        color: var(--text);
+      }
+
+      .nav-item.active {
+        background: linear-gradient(
+          135deg,
+          rgba(255, 215, 0, 0.12),
+          rgba(255, 170, 0, 0.05)
+        );
+        color: #ffd700;
+        border: 1px solid rgba(255, 215, 0, 0.15);
+      }
+
+      .nav-item .icon {
+        font-size: 18px;
+        width: 20px;
+        text-align: center;
+      }
+
+      .nav-count {
+        margin-left: auto;
+        background: var(--danger);
+        color: #fff;
+        font-size: 10px;
+        font-weight: 700;
+        min-width: 20px;
+        height: 20px;
+        padding: 0 5px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .sidebar-footer {
+        padding: 14px 10px;
+        border-top: 1px solid var(--border);
+      }
+
+      .btn-logout {
+        width: 100%;
+        padding: 10px;
+        background: rgba(255, 77, 77, 0.1);
+        border: 1px solid rgba(255, 77, 77, 0.25);
+        border-radius: 8px;
+        color: #ff8080;
+        font-family: "Rajdhani", sans-serif;
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      .btn-logout:hover {
+        background: rgba(255, 77, 77, 0.2);
+      }
+
+      /* MAIN */
+      .main {
+        margin-left: var(--sidebar-w);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .topbar {
+        padding: 16px 28px;
+        background: var(--bg-dark);
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+
+      .topbar-title {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+
+      .topbar-right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .topbar-date {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      .admin-crown {
+        color: var(--admin-gold);
+        font-size: 20px;
+      }
+
+      .content {
+        padding: 24px 28px;
+        flex: 1;
+      }
+
+      .page {
+        display: none;
+      }
+
+      .page.active {
+        display: block;
+      }
+
+      /* Stats */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 14px;
+        margin-bottom: 24px;
+      }
+
+      .stat-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px;
+        position: relative;
+        overflow: hidden;
+        transition: transform 0.2s;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-2px);
+      }
+
+      .stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+      }
+
+      .stat-card.blue::before {
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+      }
+
+      .stat-card.gold::before {
+        background: linear-gradient(90deg, #ffd700, #ffaa00);
+      }
+
+      .stat-card.green::before {
+        background: linear-gradient(90deg, #00e676, #00bcd4);
+      }
+
+      .stat-card.orange::before {
+        background: linear-gradient(90deg, #ff9800, #ffcc02);
+      }
+
+      .stat-card.red::before {
+        background: linear-gradient(90deg, #ff4444, #ff9800);
+      }
+
+      .stat-label {
+        font-size: 10px;
+        color: var(--text-muted);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+
+      .stat-value {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 30px;
+        font-weight: 700;
+      }
+
+      .stat-sub {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-top: 2px;
+      }
+
+      .stat-icon {
+        position: absolute;
+        right: 14px;
+        top: 14px;
+        font-size: 26px;
+        opacity: 0.12;
+      }
+
+      .panel {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+
+      .panel-title {
+        font-family: "Rajdhani", sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .panel-hdr {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+      }
+
+      .panel-hdr .panel-title {
+        margin-bottom: 0;
+      }
+
+      .btn {
+        padding: 9px 18px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-family: "Rajdhani", sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        transition: all 0.2s;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent), #1070d0);
+        color: #fff;
+        box-shadow: 0 4px 15px rgba(30, 144, 255, 0.25);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(30, 144, 255, 0.4);
+      }
+
+      .btn-gold {
+        background: linear-gradient(135deg, #cc8800, #ffd700);
+        color: #000;
+        font-weight: 700;
+      }
+
+      .btn-sm {
+        padding: 5px 12px;
+        font-size: 11px;
+      }
+
+      .btn-danger {
+        background: rgba(255, 77, 77, 0.15);
+        border: 1px solid rgba(255, 77, 77, 0.3);
+        color: #ff8080;
+      }
+
+      .btn-success {
+        background: rgba(0, 230, 118, 0.15);
+        border: 1px solid rgba(0, 230, 118, 0.3);
+        color: var(--success);
+      }
+
+      .form-group {
+        margin-bottom: 14px;
+      }
+
+      .form-group label {
+        display: block;
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        margin-bottom: 6px;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        background: var(--bg-dark);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 10px 14px;
+        color: var(--text);
+        font-family: "Exo 2", sans-serif;
+        font-size: 14px;
+        outline: none;
+        transition: all 0.3s;
+        resize: vertical;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.12);
+      }
+
+      .form-group select option {
+        background: var(--bg-card);
+      }
+
+      .form-row-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+
+      .form-row-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 14px;
+      }
+
+      /* Table */
+      .table-wrap {
+        overflow-x: auto;
+      }
+
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .data-table th {
+        text-align: left;
+        padding: 10px 14px;
+        font-size: 10px;
+        letter-spacing: 1px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        border-bottom: 1px solid var(--border);
+        font-weight: 600;
+        white-space: nowrap;
+      }
+
+      .data-table td {
+        padding: 11px 14px;
+        font-size: 13px;
+        border-bottom: 1px solid rgba(26, 58, 92, 0.5);
+        vertical-align: middle;
+      }
+
+      .data-table tr:hover td {
+        background: rgba(30, 144, 255, 0.04);
+      }
+
+      .data-table tr:last-child td {
+        border-bottom: none;
+      }
+
+      .status-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        white-space: nowrap;
+      }
+
+      .status-pending {
+        background: rgba(255, 170, 0, 0.15);
+        color: #ffaa00;
+      }
+
+      .status-resolved {
+        background: rgba(0, 230, 118, 0.15);
+        color: #00e676;
+      }
+
+      .status-progress {
+        background: rgba(30, 144, 255, 0.15);
+        color: #60afff;
+      }
+
+      .notice-item {
+        background: var(--bg-dark);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 14px 16px;
+        margin-bottom: 10px;
+        border-left: 3px solid #ffd700;
+      }
+
+      .notice-title {
+        font-weight: 600;
+        font-size: 14px;
+        margin-bottom: 4px;
+      }
+
+      .notice-meta {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+      }
+
+      .notice-body {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      .notice-actions {
+        margin-top: 10px;
+        display: flex;
+        gap: 8px;
+      }
+
+      .notice-tag {
+        display: inline-block;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        padding: 2px 8px;
+        border-radius: 20px;
+        margin-bottom: 6px;
+      }
+
+      .tag-urgent {
+        background: rgba(255, 77, 77, 0.15);
+        color: #ff8080;
+      }
+
+      .tag-info {
+        background: rgba(0, 230, 118, 0.15);
+        color: #00e676;
+      }
+
+      .tag-general {
+        background: rgba(30, 144, 255, 0.15);
+        color: #60afff;
+      }
+
+      .two-col {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      .alert-box {
+        padding: 10px 14px;
+        border-radius: 8px;
+        font-size: 13px;
+        margin-top: 10px;
+        display: none;
+      }
+
+      .alert-success {
+        background: rgba(0, 230, 118, 0.1);
+        border: 1px solid rgba(0, 230, 118, 0.3);
+        color: var(--success);
+        display: block;
+      }
+
+      .alert-error {
+        background: rgba(255, 77, 77, 0.1);
+        border: 1px solid rgba(255, 77, 77, 0.3);
+        color: #ff8080;
+        display: block;
+      }
+
+      .user-card {
+        background: var(--bg-dark);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
+      .u-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #1e3a6e, #2563b0);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        border: 2px solid var(--border);
+        flex-shrink: 0;
+      }
+
+      .u-info {
+        flex: 1;
+      }
+
+      .u-name {
+        font-weight: 600;
+        font-size: 15px;
+      }
+
+      .u-meta {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 2px;
+      }
+
+      .u-tags {
+        display: flex;
+        gap: 6px;
+        margin-top: 6px;
+        flex-wrap: wrap;
+      }
+
+      .u-tag {
+        background: rgba(30, 144, 255, 0.1);
+        border: 1px solid rgba(30, 144, 255, 0.2);
+        color: var(--accent2);
+        font-size: 10px;
+        padding: 2px 8px;
+        border-radius: 12px;
+      }
+
+      .search-bar {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+
+      .search-bar input {
+        flex: 1;
+        background: var(--bg-dark);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 10px 14px;
+        color: var(--text);
+        font-family: "Exo 2", sans-serif;
+        font-size: 14px;
+        outline: none;
+      }
+
+      .search-bar input:focus {
+        border-color: var(--accent);
+      }
+
+      .filter-select {
+        background: var(--bg-dark);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 10px 14px;
+        color: var(--text);
+        font-family: "Exo 2", sans-serif;
+        font-size: 13px;
+        outline: none;
+        cursor: pointer;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 30px;
+        color: var(--text-muted);
+        font-size: 14px;
+      }
+
+      .empty-state .icon {
+        font-size: 40px;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="logo-row">
+          <div class="logo-icon">🏘️</div>
+          <div class="brand-text">
+            <h2>SocietyPro</h2>
+            <p>Administration Panel</p>
+            <span class="admin-badge">ADMIN</span>
+          </div>
+        </div>
+      </div>
+      <div class="admin-info">
+        <div class="admin-avatar">👑</div>
+        <div class="admin-meta">
+          <div class="name" id="adminName">Admin</div>
+          <div class="sub">Society Manager</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <div class="nav-label">Overview</div>
+        <div class="nav-item active" onclick="showPage('dashboard', this)">
+          <span class="icon">📊</span> Dashboard
+        </div>
+        <div class="nav-label">Management</div>
+        <div class="nav-item" onclick="showPage('users', this)">
+          <span class="icon">👥</span> All Residents
+        </div>
+        <div class="nav-item" onclick="showPage('maintenance', this)">
+          <span class="icon">🔧</span> Maintenance
+          <span class="nav-count" id="mCount">0</span>
+        </div>
+        <div class="nav-item" onclick="showPage('complaints', this)">
+          <span class="icon">📢</span> Complaints
+          <span class="nav-count" id="cCount">0</span>
+        </div>
+        <div class="nav-item" onclick="showPage('vehicles', this)">
+          <span class="icon">🚗</span> Vehicle Records
+        </div>
+        <div class="nav-label">Communication</div>
+        <div class="nav-item" onclick="showPage('notices', this)">
+          <span class="icon">📋</span> Post Notices
+        </div>
+        <div class="nav-label">Settings</div>
+        <div class="nav-item" onclick="showPage('emergency', this)">
+          <span class="icon">🚨</span> Emergency Contacts
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn-logout" onclick="logout()">🚪 LOGOUT</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="topbar">
+        <div class="topbar-title" id="pageTitle">ADMIN DASHBOARD</div>
+        <div class="topbar-right">
+          <div class="topbar-date" id="currentDate"></div>
+          <div class="admin-crown">👑</div>
+        </div>
+      </div>
+
+      <div class="content">
+        <!-- DASHBOARD -->
+        <div class="page active" id="page-dashboard">
+          <div class="stats-grid">
+            <div class="stat-card blue">
+              <div class="stat-label">Total Residents</div>
+              <div class="stat-value" id="s-users">0</div>
+              <div class="stat-sub">Registered</div>
+              <div class="stat-icon">👥</div>
+            </div>
+            <div class="stat-card orange">
+              <div class="stat-label">Maintenance</div>
+              <div class="stat-value" id="s-maint">0</div>
+              <div class="stat-sub">Requests</div>
+              <div class="stat-icon">🔧</div>
+            </div>
+            <div class="stat-card red">
+              <div class="stat-label">Complaints</div>
+              <div class="stat-value" id="s-comp">0</div>
+              <div class="stat-sub">Filed</div>
+              <div class="stat-icon">📢</div>
+            </div>
+            <div class="stat-card green">
+              <div class="stat-label">Vehicles</div>
+              <div class="stat-value" id="s-veh">0</div>
+              <div class="stat-sub">Registered</div>
+              <div class="stat-icon">🚗</div>
+            </div>
+            <div class="stat-card gold">
+              <div class="stat-label">Notices Posted</div>
+              <div class="stat-value" id="s-notices">3</div>
+              <div class="stat-sub">Active</div>
+              <div class="stat-icon">📋</div>
+            </div>
+          </div>
+          <div class="two-col">
+            <div class="panel">
+              <div class="panel-title"><span>🔧</span> Recent Maintenance</div>
+              <div id="dash-maint">
+                <div class="empty-state">
+                  <div class="icon">🔧</div>
+                  No requests yet
+                </div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-title"><span>📢</span> Recent Complaints</div>
+              <div id="dash-comp">
+                <div class="empty-state">
+                  <div class="icon">📢</div>
+                  No complaints yet
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- USERS -->
+        <div class="page" id="page-users">
+          <div class="panel">
+            <div class="panel-hdr">
+              <div class="panel-title"><span>👥</span> All Residents</div>
+            </div>
+            <div class="search-bar">
+              <input
+                type="text"
+                id="userSearch"
+                placeholder="Search by name, email, flat..."
+                oninput="searchUsers()"
+              />
+              <select class="filter-select">
+                <option>All Residents</option>
+              </select>
+            </div>
+            <div id="usersList">
+              <div class="empty-state">
+                <div class="icon">👥</div>
+                No residents registered yet
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MAINTENANCE -->
+        <div class="page" id="page-maintenance">
+          <div class="panel">
+            <div class="panel-hdr">
+              <div class="panel-title">
+                <span>🔧</span> Maintenance Requests
+              </div>
+              <select
+                class="filter-select"
+                id="maintFilter"
+                onchange="renderMaintenance()"
+              >
+                <option value="all">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Resolved">Resolved</option>
+              </select>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Resident</th>
+                    <th>Flat</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Priority</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="maintTable">
+                  <tr>
+                    <td colspan="9">
+                      <div class="empty-state">No maintenance requests yet</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- COMPLAINTS -->
+        <div class="page" id="page-complaints">
+          <div class="panel">
+            <div class="panel-hdr">
+              <div class="panel-title"><span>📢</span> All Complaints</div>
+              <select
+                class="filter-select"
+                id="compFilter"
+                onchange="renderComplaints()"
+              >
+                <option value="all">All Status</option>
+                <option value="Pending">Pending</option>
+                <option value="Resolved">Resolved</option>
+              </select>
+            </div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Resident</th>
+                    <th>Flat</th>
+                    <th>Category</th>
+                    <th>Subject</th>
+                    <th>Details</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="compTable">
+                  <tr>
+                    <td colspan="9">
+                      <div class="empty-state">No complaints filed yet</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- VEHICLES -->
+        <div class="page" id="page-vehicles">
+          <div class="panel">
+            <div class="panel-title"><span>🚗</span> All Vehicle Records</div>
+            <div class="table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Owner</th>
+                    <th>Flat</th>
+                    <th>Type</th>
+                    <th>Vehicle</th>
+                    <th>Reg. Number</th>
+                    <th>Color</th>
+                    <th>Parking Slot</th>
+                  </tr>
+                </thead>
+                <tbody id="vehTable">
+                  <tr>
+                    <td colspan="8">
+                      <div class="empty-state">No vehicles registered</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- NOTICES -->
+        <div class="page" id="page-notices">
+          <div class="two-col">
+            <div class="panel">
+              <div class="panel-title"><span>✍️</span> Post New Notice</div>
+              <div class="form-group">
+                <label>Notice Title</label
+                ><input
+                  type="text"
+                  id="nTitle"
+                  placeholder="e.g. Water Supply Interruption"
+                />
+              </div>
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label>Type</label>
+                  <select id="nType">
+                    <option>General</option>
+                    <option>Urgent</option>
+                    <option>Info</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Date</label><input type="date" id="nDate" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label>Notice Content</label
+                ><textarea
+                  id="nBody"
+                  rows="4"
+                  placeholder="Write the notice content here..."
+                ></textarea>
+              </div>
+              <div id="noticeAlert" class="alert-box"></div>
+              <button class="btn btn-gold" onclick="postNotice()">
+                📋 POST NOTICE
+              </button>
+            </div>
+            <div class="panel">
+              <div class="panel-title"><span>📋</span> Posted Notices</div>
+              <div id="adminNotices">
+                <div class="notice-item">
+                  <div class="notice-tag tag-urgent">URGENT</div>
+                  <div class="notice-title">Water Supply Interruption</div>
+                  <div class="notice-meta">Apr 14, 2026</div>
+                  <div class="notice-body">
+                    Water supply interrupted on Apr 16 from 9AM–2PM for pipeline
+                    maintenance.
+                  </div>
+                </div>
+                <div class="notice-item">
+                  <div class="notice-tag tag-info">INFO</div>
+                  <div class="notice-title">
+                    Monthly Society Meeting – April 20
+                  </div>
+                  <div class="notice-meta">Apr 12, 2026</div>
+                  <div class="notice-body">
+                    Meeting in community hall on April 20 at 6PM.
+                  </div>
+                </div>
+                <div class="notice-item">
+                  <div class="notice-tag tag-general">GENERAL</div>
+                  <div class="notice-title">Maintenance Fee Due – April 30</div>
+                  <div class="notice-meta">Apr 1, 2026</div>
+                  <div class="notice-body">
+                    Pay monthly fee before April 30.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EMERGENCY CONTACTS -->
+        <div class="page" id="page-emergency">
+          <div class="two-col">
+            <div class="panel">
+              <div class="panel-title">
+                <span>➕</span> Add Emergency Contact
+              </div>
+              <div class="form-group">
+                <label>Name / Department</label
+                ><input
+                  type="text"
+                  id="ecName"
+                  placeholder="e.g. Fire Department"
+                />
+              </div>
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label>Type</label
+                  ><select id="ecType">
+                    <option>Emergency</option>
+                    <option>Medical</option>
+                    <option>Security</option>
+                    <option>Maintenance</option>
+                    <option>Admin</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Phone Number</label
+                  ><input
+                    type="tel"
+                    id="ecPhone"
+                    placeholder="+91 99999 00000"
+                  />
+                </div>
+              </div>
+              <div id="ecAlert" class="alert-box"></div>
+              <button class="btn btn-primary" onclick="addEmergency()">
+                ADD CONTACT
+              </button>
+            </div>
+            <div class="panel">
+              <div class="panel-title">
+                <span>🚨</span> Emergency Contacts List
+              </div>
+              <div id="ecList">
+                <div class="user-card">
+                  <div
+                    class="u-avatar"
+                    style="
+                      background: linear-gradient(135deg, #7a0000, #cc0000);
+                    "
+                  >
+                    🚒
+                  </div>
+                  <div class="u-info">
+                    <div class="u-name">Fire Department</div>
+                    <div class="u-meta">
+                      Emergency ·
+                      <a href="tel:101" style="color: var(--accent2)">101</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="user-card">
+                  <div
+                    class="u-avatar"
+                    style="
+                      background: linear-gradient(135deg, #004d00, #008000);
+                    "
+                  >
+                    🚑
+                  </div>
+                  <div class="u-info">
+                    <div class="u-name">Ambulance</div>
+                    <div class="u-meta">
+                      Medical ·
+                      <a href="tel:108" style="color: var(--accent2)">108</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="user-card">
+                  <div
+                    class="u-avatar"
+                    style="
+                      background: linear-gradient(135deg, #00007a, #0000cc);
+                    "
+                  >
+                    🚔
+                  </div>
+                  <div class="u-info">
+                    <div class="u-name">Police</div>
+                    <div class="u-meta">
+                      Emergency ·
+                      <a href="tel:100" style="color: var(--accent2)">100</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="user-card">
+                  <div
+                    class="u-avatar"
+                    style="
+                      background: linear-gradient(135deg, #1a3a6e, #2563b0);
+                    "
+                  >
+                    👮
+                  </div>
+                  <div class="u-info">
+                    <div class="u-name">Society Security</div>
+                    <div class="u-meta">
+                      Security ·
+                      <a href="tel:+919876540001" style="color: var(--accent2)"
+                        >+91 98765 40001</a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!--                                                     js & node/express .js code  -->
+
+    <script>
+      window.onload = () => {
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        document.getElementById("adminName").textContent = user.name || "Admin";
+        const d = new Date();
+        document.getElementById("currentDate").textContent =
+          d.toLocaleDateString("en-IN", {
+            weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+          });
+        document.getElementById("nDate").valueAsDate = new Date();
+        loadAll();
+      };
+
+      const API_ROOT = "http://localhost:3000";
+      function getToken() {
+        return localStorage.getItem("token");
+      }
+      function apiHeaders() {
+        return {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + getToken(),
+        };
+      }
+
+      function getData(k) {
+        return JSON.parse(localStorage.getItem(k) || "[]");
+      }
+      function saveData(k, d) {
+        localStorage.setItem(k, JSON.stringify(d));
+      }
+
+      async function loadAll() {
+        try {
+          const [usersRes, maintRes, compsRes, vehsRes] = await Promise.all([
+            fetch(`${API_ROOT}/api/users`, { headers: apiHeaders() }),
+            fetch(`${API_ROOT}/api/maintenance`, { headers: apiHeaders() }),
+            fetch(`${API_ROOT}/api/complaints`, { headers: apiHeaders() }),
+            fetch(`${API_ROOT}/api/vehicles`, { headers: apiHeaders() }),
+          ]);
+
+          const users = usersRes.ok
+            ? await usersRes.json()
+            : getData("registered_users");
+          const maint = maintRes.ok
+            ? await maintRes.json()
+            : getData("all_maintenance");
+          const comps = compsRes.ok
+            ? await compsRes.json()
+            : getData("all_complaints");
+          const vehs = vehsRes.ok
+            ? await vehsRes.json()
+            : getData("all_vehicles");
+
+          saveData("registered_users", users);
+          saveData("all_maintenance", maint);
+          saveData("all_complaints", comps);
+          saveData("all_vehicles", vehs);
+
+          document.getElementById("s-users").textContent = users.length;
+          document.getElementById("s-maint").textContent = maint.length;
+          document.getElementById("s-comp").textContent = comps.length;
+          document.getElementById("s-veh").textContent = vehs.length;
+          document.getElementById("mCount").textContent = maint.filter(
+            (m) => m.status === "Pending",
+          ).length;
+          document.getElementById("cCount").textContent = comps.filter(
+            (c) => c.status === "Pending",
+          ).length;
+
+          renderUsers(users);
+          renderMaintenance(maint);
+          renderComplaints(comps);
+          renderVehicles(vehs);
+          renderDash(maint, comps);
+        } catch (e) {
+          console.warn("API not reachable, using localStorage:", e);
+          const maint = getData("all_maintenance");
+          const comps = getData("all_complaints");
+          const vehs = getData("all_vehicles");
+          const users = getData("registered_users");
+          document.getElementById("s-users").textContent = users.length;
+          document.getElementById("s-maint").textContent = maint.length;
+          document.getElementById("s-comp").textContent = comps.length;
+          document.getElementById("s-veh").textContent = vehs.length;
+          document.getElementById("mCount").textContent = maint.filter(
+            (m) => m.status === "Pending",
+          ).length;
+          document.getElementById("cCount").textContent = comps.filter(
+            (c) => c.status === "Pending",
+          ).length;
+          renderUsers(users);
+          renderMaintenance(maint);
+          renderComplaints(comps);
+          renderVehicles(vehs);
+          renderDash(maint, comps);
+        }
+      }
+
+      function renderDash(maint, comps) {
+        const mEl = document.getElementById("dash-maint");
+        const cEl = document.getElementById("dash-comp");
+        if (!maint.length) {
+          mEl.innerHTML =
+            '<div class="empty-state"><div class="icon">🔧</div>No requests yet</div>';
+        } else
+          mEl.innerHTML = maint
+            .slice(0, 3)
+            .map(
+              (m) =>
+                `<div style="padding:10px 0;border-bottom:1px solid var(--border);font-size:13px"><div style="display:flex;justify-content:space-between"><strong>${m.type || "–"}</strong><span class="status-badge status-${m.status === "Pending" ? "pending" : "resolved"}">${m.status}</span></div><div style="color:var(--text-muted);font-size:12px;margin-top:3px">${m.userName || "–"} · Flat ${m.flatNo || "–"} · ${m.priority}</div></div>`,
+            )
+            .join("");
+        if (!comps.length) {
+          cEl.innerHTML =
+            '<div class="empty-state"><div class="icon">📢</div>No complaints yet</div>';
+        } else
+          cEl.innerHTML = comps
+            .slice(0, 3)
+            .map(
+              (c) =>
+                `<div style="padding:10px 0;border-bottom:1px solid var(--border);font-size:13px"><div style="display:flex;justify-content:space-between"><strong>${c.subject || "–"}</strong><span class="status-badge status-pending">${c.status}</span></div><div style="color:var(--text-muted);font-size:12px;margin-top:3px">${c.userName || "–"} · ${c.category}</div></div>`,
+            )
+            .join("");
+      }
+
+      function renderUsers(users) {
+        const el = document.getElementById("usersList");
+        if (!users.length) {
+          el.innerHTML =
+            '<div class="empty-state"><div class="icon">👥</div>No residents yet</div>';
+          return;
+        }
+        el.innerHTML = users
+          .map(
+            (u) => `
+    <div class="user-card">
+      <div class="u-avatar">👤</div>
+      <div class="u-info">
+        <div class="u-name">${u.name}</div>
+        <div class="u-meta">${u.email} · ${u.phone || "–"}</div>
+        <div class="u-tags">
+          <span class="u-tag">Flat: ${u.flatNo || "–"}</span>
+          <span class="u-tag">ID: ${u.memberId || "–"}</span>
+          <span class="u-tag">Joined: ${u.createdAt ? new Date(u.createdAt).toLocaleDateString() : "–"}</span>
+        </div>
+        <div style="margin-top:8px;display:flex;gap:8px;">
+          <button onclick="viewUserProfile('${u._id}')" style="padding:5px 12px;background:#4a4a8a;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;">👁 View Profile</button>
+          <button onclick="deleteUser('${u._id}','${u.name}')" style="padding:5px 12px;background:#c0392b;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;">🗑 Remove</button>
+        </div>
+      </div>
+    </div>`,
+          )
+          .join("");
+      }
+
+      // ─── DELETE USER ──────────────────────────────────────────────────────────
+      async function deleteUser(id, name) {
+        if (
+          !confirm(
+            `Are you sure you want to permanently remove "${name}" from the society? This will delete all their data.`,
+          )
+        )
+          return;
+        try {
+          const res = await fetch(`${API_ROOT}/api/users/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: "Bearer " + getToken() },
+          });
+          const data = await res.json();
+          if (res.ok) {
+            alert("✅ Resident removed successfully");
+            loadAll();
+          } else {
+            alert("❌ " + (data.message || "Failed to remove resident"));
+          }
+        } catch (e) {
+          alert("❌ Cannot connect to server");
+        }
+      }
+
+      // ─── VIEW USER PROFILE ────────────────────────────────────────────────────
+      async function viewUserProfile(id) {
+        try {
+          const res = await fetch(`${API_ROOT}/api/users/${id}`, {
+            headers: { Authorization: "Bearer " + getToken() },
+          });
+          const data = await res.json();
+          if (!res.ok) return alert("Failed to load profile");
+          const { user, vehicles, complaints, maintenance } = data;
+          const modal = document.createElement("div");
+          modal.style.cssText =
+            "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9999;display:flex;align-items:center;justify-content:center;";
+          modal.innerHTML = `
+          <div style="background:#1a1a2e;color:#fff;border-radius:12px;padding:30px;max-width:600px;width:90%;max-height:80vh;overflow-y:auto;border:1px solid #4a4a8a;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+              <h2 style="margin:0;color:#a78bfa;">👤 ${user.name}</h2>
+              <button onclick="this.closest('div[style*=fixed]').remove()" style="background:#e74c3c;border:none;color:#fff;padding:8px 14px;border-radius:8px;cursor:pointer;">✕ Close</button>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+              <div style="background:#0f0f23;padding:12px;border-radius:8px;"><small style="color:#888;">Email</small><div>${user.email}</div></div>
+              <div style="background:#0f0f23;padding:12px;border-radius:8px;"><small style="color:#888;">Phone</small><div>${user.phone || "N/A"}</div></div>
+              <div style="background:#0f0f23;padding:12px;border-radius:8px;"><small style="color:#888;">Flat No</small><div>${user.flatNo || "N/A"}</div></div>
+              <div style="background:#0f0f23;padding:12px;border-radius:8px;"><small style="color:#888;">Member ID</small><div>${user.memberId || "N/A"}</div></div>
+            </div>
+            <h4 style="color:#a78bfa;">🚗 Vehicles (${vehicles.length})</h4>
+            ${vehicles.length ? vehicles.map((v) => `<div style="background:#0f0f23;padding:10px;border-radius:8px;margin-bottom:8px;">${v.make} ${v.model} | ${v.reg} | Slot: ${v.slot || "N/A"}</div>`).join("") : '<div style="color:#888;">No vehicles registered</div>'}
+            <h4 style="color:#a78bfa;margin-top:16px;">📋 Complaints (${complaints.length})</h4>
+            ${complaints.length ? complaints.map((c) => `<div style="background:#0f0f23;padding:10px;border-radius:8px;margin-bottom:8px;">${c.subject} — <span style="color:${c.status === "Resolved" ? "#2ecc71" : "#e67e22"}">${c.status}</span></div>`).join("") : '<div style="color:#888;">No complaints</div>'}
+            <h4 style="color:#a78bfa;margin-top:16px;">🔧 Maintenance (${maintenance.length})</h4>
+            ${maintenance.length ? maintenance.map((m) => `<div style="background:#0f0f23;padding:10px;border-radius:8px;margin-bottom:8px;">${m.type}: ${m.desc} — <span style="color:${m.status === "Resolved" ? "#2ecc71" : "#e67e22"}">${m.status}</span></div>`).join("") : '<div style="color:#888;">No maintenance requests</div>'}
+          </div>`;
+          document.body.appendChild(modal);
+        } catch (e) {
+          alert("Cannot connect to server");
+        }
+      }
+
+      function searchUsers() {
+        const q = document.getElementById("userSearch").value.toLowerCase();
+        const users = getData("registered_users").filter((u) =>
+          (
+            (u.name || "") +
+            (u.email || "") +
+            (u.flatNo || "") +
+            (u.memberId || "")
+          )
+            .toLowerCase()
+            .includes(q),
+        );
+        renderUsers(users);
+      }
+
+      function renderMaintenance(data) {
+        const filter = document.getElementById("maintFilter")?.value || "all";
+        let arr = data || getData("all_maintenance");
+        if (filter !== "all") arr = arr.filter((m) => m.status === filter);
+        const tbody = document.getElementById("maintTable");
+        if (!arr.length) {
+          tbody.innerHTML =
+            '<tr><td colspan="9"><div class="empty-state">No records found</div></td></tr>';
+          return;
+        }
+        tbody.innerHTML = arr
+          .map(
+            (m, i) => `
+    <tr>
+      <td style="color:var(--text-muted)">${i + 1}</td>
+      <td><strong>${m.userName || "–"}</strong></td>
+      <td>${m.flatNo || "–"}</td>
+      <td>${m.type}</td>
+      <td style="color:var(--text-muted);max-width:180px">${m.desc.substring(0, 60)}${m.desc.length > 60 ? "..." : ""}</td>
+      <td><span class="status-badge ${m.priority === "Urgent" ? "status-pending" : m.priority === "High" ? "status-pending" : "status-progress"}">${m.priority}</span></td>
+      <td style="color:var(--text-muted)">${m.date}</td>
+      <td><span class="status-badge status-${m.status === "Pending" ? "pending" : m.status === "Resolved" ? "resolved" : "progress"}">${m.status}</span></td>
+      <td>
+        <select onchange="updateMaintStatus('${m._id || m.id}',this.value)" style="background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;padding:4px 8px;color:var(--text);font-size:11px;cursor:pointer;outline:none">
+          <option ${m.status === "Pending" ? "selected" : ""}>Pending</option>
+          <option ${m.status === "In Progress" ? "selected" : ""}>In Progress</option>
+          <option ${m.status === "Resolved" ? "selected" : ""}>Resolved</option>
+        </select>
+      </td>
+    </tr>`,
+          )
+          .join("");
+      }
+
+      function updateMaintStatus(id, status) {
+        let arr = getData("all_maintenance");
+        arr = arr.map((m) => ((m._id || m.id) === id ? { ...m, status } : m));
+        saveData("all_maintenance", arr);
+        document.getElementById("mCount").textContent = arr.filter(
+          (m) => m.status === "Pending",
+        ).length;
+        document.getElementById("s-maint").textContent = arr.length;
+      }
+
+      function renderComplaints(data) {
+        const filter = document.getElementById("compFilter")?.value || "all";
+        let arr = data || getData("all_complaints");
+        if (filter !== "all") arr = arr.filter((c) => c.status === filter);
+        const tbody = document.getElementById("compTable");
+        if (!arr.length) {
+          tbody.innerHTML =
+            '<tr><td colspan="9"><div class="empty-state">No complaints found</div></td></tr>';
+          return;
+        }
+        tbody.innerHTML = arr
+          .map(
+            (c, i) => `
+    <tr>
+      <td style="color:var(--text-muted)">${i + 1}</td>
+      <td><strong>${c.userName || "–"}</strong></td>
+      <td>${c.flatNo || "–"}</td>
+      <td>${c.category}</td>
+      <td><strong>${c.subject}</strong></td>
+      <td style="color:var(--text-muted);max-width:180px">${c.details.substring(0, 60)}${c.details.length > 60 ? "..." : ""}</td>
+      <td style="color:var(--text-muted)">${c.date}</td>
+      <td><span class="status-badge status-${c.status === "Pending" ? "pending" : "resolved"}">${c.status}</span></td>
+      <td>
+        <select onchange="updateCompStatus('${c._id || c.id}',this.value)" style="background:var(--bg-dark);border:1px solid var(--border);border-radius:6px;padding:4px 8px;color:var(--text);font-size:11px;cursor:pointer;outline:none">
+          <option ${c.status === "Pending" ? "selected" : ""}>Pending</option>
+          <option ${c.status === "Resolved" ? "selected" : ""}>Resolved</option>
+        </select>
+      </td>
+    </tr>`,
+          )
+          .join("");
+      }
+
+      function updateCompStatus(id, status) {
+        let arr = getData("all_complaints");
+        arr = arr.map((c) => ((c._id || c.id) === id ? { ...c, status } : c));
+        saveData("all_complaints", arr);
+        document.getElementById("cCount").textContent = arr.filter(
+          (c) => c.status === "Pending",
+        ).length;
+      }
+
+      function renderVehicles(data) {
+        const vehs = data || getData("all_vehicles");
+        const tbody = document.getElementById("vehTable");
+        if (!vehs.length) {
+          tbody.innerHTML =
+            '<tr><td colspan="8"><div class="empty-state">No vehicles registered</div></td></tr>';
+          return;
+        }
+        tbody.innerHTML = vehs
+          .map(
+            (v, i) => `
+    <tr>
+      <td style="color:var(--text-muted)">${i + 1}</td>
+      <td><strong>${v.userName || "–"}</strong></td>
+      <td>${v.flatNo || "–"}</td>
+      <td>${v.type}</td>
+      <td>${v.make} ${v.model}</td>
+      <td><strong style="color:var(--accent2)">${v.reg}</strong></td>
+      <td>${v.color || "–"}</td>
+      <td>${v.slot || "–"}</td>
+    </tr>`,
+          )
+          .join("");
+      }
+
+      function postNotice() {
+        const title = document.getElementById("nTitle").value.trim();
+        const type = document.getElementById("nType").value;
+        const date = document.getElementById("nDate").value;
+        const body = document.getElementById("nBody").value.trim();
+        if (!title || !body)
+          return showAlert("noticeAlert", "Please fill all fields.", "error");
+        const tagMap = {
+          Urgent: "tag-urgent",
+          Info: "tag-info",
+          General: "tag-general",
+        };
+        const d = date
+          ? new Date(date).toLocaleDateString("en-IN", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })
+          : new Date().toLocaleDateString("en-IN", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            });
+        const html = `<div class="notice-item"><div class="notice-tag ${tagMap[type]}">${type.toUpperCase()}</div><div class="notice-title">${title}</div><div class="notice-meta">${d}</div><div class="notice-body">${body}</div></div>`;
+        document
+          .getElementById("adminNotices")
+          .insertAdjacentHTML("afterbegin", html);
+        // Save for user dashboard
+        const notices = getData("admin_notices");
+        notices.unshift({ title, type, date: d, body, id: Date.now() });
+        saveData("admin_notices", notices);
+        document.getElementById("s-notices").textContent =
+          parseInt(document.getElementById("s-notices").textContent) + 1;
+        showAlert("noticeAlert", "Notice posted successfully!", "success");
+        ["nTitle", "nBody"].forEach(
+          (id) => (document.getElementById(id).value = ""),
+        );
+        document.getElementById("nType").value = "General";
+      }
+
+      function addEmergency() {
+        const name = document.getElementById("ecName").value.trim();
+        const type = document.getElementById("ecType").value;
+        const phone = document.getElementById("ecPhone").value.trim();
+        if (!name || !phone)
+          return showAlert("ecAlert", "Please fill all fields.", "error");
+        const icons = {
+          Emergency: "🚨",
+          Medical: "🚑",
+          Security: "🛡️",
+          Maintenance: "🔧",
+          Admin: "👔",
+        };
+        const el = document.getElementById("ecList");
+        el.insertAdjacentHTML(
+          "beforeend",
+          `
+    <div class="user-card">
+      <div class="u-avatar">${icons[type] || "📞"}</div>
+      <div class="u-info">
+        <div class="u-name">${name}</div>
+        <div class="u-meta">${type} · <a href="tel:${phone}" style="color:var(--accent2)">${phone}</a></div>
+      </div>
+    </div>`,
+        );
+        showAlert("ecAlert", "Contact added!", "success");
+        ["ecName", "ecPhone"].forEach(
+          (id) => (document.getElementById(id).value = ""),
+        );
+      }
+
+      function showPage(name, el) {
+        document
+          .querySelectorAll(".page")
+          .forEach((p) => p.classList.remove("active"));
+        document
+          .querySelectorAll(".nav-item")
+          .forEach((n) => n.classList.remove("active"));
+        document.getElementById("page-" + name).classList.add("active");
+        el.classList.add("active");
+        const titles = {
+          dashboard: "ADMIN DASHBOARD",
+          users: "ALL RESIDENTS",
+          maintenance: "MAINTENANCE REQUESTS",
+          complaints: "COMPLAINTS",
+          vehicles: "VEHICLE RECORDS",
+          notices: "POST NOTICES",
+          emergency: "EMERGENCY CONTACTS",
+        };
+        document.getElementById("pageTitle").textContent =
+          titles[name] || name.toUpperCase();
+        loadAll();
+      }
+
+      function showAlert(id, msg, type) {
+        const el = document.getElementById(id);
+        el.textContent = msg;
+        el.className = "alert-box alert-" + type;
+        setTimeout(() => {
+          el.className = "alert-box";
+        }, 4000);
+      }
+
+      function logout() {
+        localStorage.clear();
+        window.location.href = "index.html";
+      }
+    </script>
+  </body>
+</html>
